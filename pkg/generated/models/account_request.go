@@ -17,21 +17,18 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// AccountAmendment account amendment
-// swagger:model AccountAmendment
-type AccountAmendment struct {
+// AccountRequest account request
+// swagger:model AccountRequest
+type AccountRequest struct {
 
 	// attributes
 	// Required: true
-	Attributes *AccountAmendmentAttributes `json:"attributes"`
+	Attributes *AccountRequestAttributes `json:"attributes"`
 
 	// Date when the resource was created
 	// Read Only: true
 	// Format: date-time
 	CreatedOn strfmt.DateTime `json:"created_on,omitempty"`
-
-	// data
-	Data *AccountUpdate `json:"data,omitempty"`
 
 	// Account Request ID
 	// Required: true
@@ -49,7 +46,7 @@ type AccountAmendment struct {
 	OrganisationID strfmt.UUID `json:"organisation_id"`
 
 	// relationships
-	Relationships *AccountAmendmentRelationships `json:"relationships,omitempty"`
+	Relationships *AccountRequestRelationships `json:"relationships,omitempty"`
 
 	// type
 	// Required: true
@@ -60,109 +57,95 @@ type AccountAmendment struct {
 	Version int64 `json:"version"`
 }
 
-func AccountAmendmentWithDefaults(defaults client.Defaults) *AccountAmendment {
-	return &AccountAmendment{
+func AccountRequestWithDefaults(defaults client.Defaults) *AccountRequest {
+	return &AccountRequest{
 
-		Attributes: AccountAmendmentAttributesWithDefaults(defaults),
+		Attributes: AccountRequestAttributesWithDefaults(defaults),
 
-		CreatedOn: defaults.GetStrfmtDateTime("AccountAmendment", "created_on"),
+		CreatedOn: defaults.GetStrfmtDateTime("AccountRequest", "created_on"),
 
-		Data: AccountUpdateWithDefaults(defaults),
+		ID: defaults.GetStrfmtUUID("AccountRequest", "id"),
 
-		ID: defaults.GetStrfmtUUID("AccountAmendment", "id"),
+		ModifiedOn: defaults.GetStrfmtDateTime("AccountRequest", "modified_on"),
 
-		ModifiedOn: defaults.GetStrfmtDateTime("AccountAmendment", "modified_on"),
+		OrganisationID: defaults.GetStrfmtUUID("AccountRequest", "organisation_id"),
 
-		OrganisationID: defaults.GetStrfmtUUID("AccountAmendment", "organisation_id"),
-
-		Relationships: AccountAmendmentRelationshipsWithDefaults(defaults),
+		Relationships: AccountRequestRelationshipsWithDefaults(defaults),
 
 		// TODO Type: ResourceType,
 
-		Version: defaults.GetInt64("AccountAmendment", "version"),
+		Version: defaults.GetInt64("AccountRequest", "version"),
 	}
 }
 
-func (m *AccountAmendment) WithAttributes(attributes AccountAmendmentAttributes) *AccountAmendment {
+func (m *AccountRequest) WithAttributes(attributes AccountRequestAttributes) *AccountRequest {
 
 	m.Attributes = &attributes
 
 	return m
 }
 
-func (m *AccountAmendment) WithoutAttributes() *AccountAmendment {
+func (m *AccountRequest) WithoutAttributes() *AccountRequest {
 	m.Attributes = nil
 	return m
 }
 
-func (m *AccountAmendment) WithCreatedOn(createdOn strfmt.DateTime) *AccountAmendment {
+func (m *AccountRequest) WithCreatedOn(createdOn strfmt.DateTime) *AccountRequest {
 
 	m.CreatedOn = createdOn
 
 	return m
 }
 
-func (m *AccountAmendment) WithData(data AccountUpdate) *AccountAmendment {
-
-	m.Data = &data
-
-	return m
-}
-
-func (m *AccountAmendment) WithoutData() *AccountAmendment {
-	m.Data = nil
-	return m
-}
-
-func (m *AccountAmendment) WithID(id strfmt.UUID) *AccountAmendment {
+func (m *AccountRequest) WithID(id strfmt.UUID) *AccountRequest {
 
 	m.ID = id
 
 	return m
 }
 
-func (m *AccountAmendment) WithModifiedOn(modifiedOn strfmt.DateTime) *AccountAmendment {
+func (m *AccountRequest) WithModifiedOn(modifiedOn strfmt.DateTime) *AccountRequest {
 
 	m.ModifiedOn = modifiedOn
 
 	return m
 }
 
-func (m *AccountAmendment) WithOrganisationID(organisationID strfmt.UUID) *AccountAmendment {
+func (m *AccountRequest) WithOrganisationID(organisationID strfmt.UUID) *AccountRequest {
 
 	m.OrganisationID = organisationID
 
 	return m
 }
 
-func (m *AccountAmendment) WithRelationships(relationships AccountAmendmentRelationships) *AccountAmendment {
+func (m *AccountRequest) WithRelationships(relationships AccountRequestRelationships) *AccountRequest {
 
 	m.Relationships = &relationships
 
 	return m
 }
 
-func (m *AccountAmendment) WithoutRelationships() *AccountAmendment {
+func (m *AccountRequest) WithoutRelationships() *AccountRequest {
 	m.Relationships = nil
 	return m
 }
 
-func (m *AccountAmendment) WithType(typeVar ResourceType) *AccountAmendment {
+func (m *AccountRequest) WithType(typeVar ResourceType) *AccountRequest {
 
 	m.Type = typeVar
 
 	return m
 }
 
-func (m *AccountAmendment) WithVersion(version int64) *AccountAmendment {
+func (m *AccountRequest) WithVersion(version int64) *AccountRequest {
 
 	m.Version = version
 
 	return m
 }
 
-// Validate validates this account amendment
-func (m *AccountAmendment) Validate(formats strfmt.Registry) error {
+// Validate validates this account request
+func (m *AccountRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAttributes(formats); err != nil {
@@ -170,10 +153,6 @@ func (m *AccountAmendment) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCreatedOn(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateData(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -207,7 +186,7 @@ func (m *AccountAmendment) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *AccountAmendment) validateAttributes(formats strfmt.Registry) error {
+func (m *AccountRequest) validateAttributes(formats strfmt.Registry) error {
 
 	if err := validate.Required("attributes", "body", m.Attributes); err != nil {
 		return err
@@ -225,7 +204,7 @@ func (m *AccountAmendment) validateAttributes(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *AccountAmendment) validateCreatedOn(formats strfmt.Registry) error {
+func (m *AccountRequest) validateCreatedOn(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.CreatedOn) { // not required
 		return nil
@@ -238,25 +217,7 @@ func (m *AccountAmendment) validateCreatedOn(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *AccountAmendment) validateData(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Data) { // not required
-		return nil
-	}
-
-	if m.Data != nil {
-		if err := m.Data.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("data")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *AccountAmendment) validateID(formats strfmt.Registry) error {
+func (m *AccountRequest) validateID(formats strfmt.Registry) error {
 
 	if err := validate.Required("id", "body", strfmt.UUID(m.ID)); err != nil {
 		return err
@@ -269,7 +230,7 @@ func (m *AccountAmendment) validateID(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *AccountAmendment) validateModifiedOn(formats strfmt.Registry) error {
+func (m *AccountRequest) validateModifiedOn(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.ModifiedOn) { // not required
 		return nil
@@ -282,7 +243,7 @@ func (m *AccountAmendment) validateModifiedOn(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *AccountAmendment) validateOrganisationID(formats strfmt.Registry) error {
+func (m *AccountRequest) validateOrganisationID(formats strfmt.Registry) error {
 
 	if err := validate.Required("organisation_id", "body", strfmt.UUID(m.OrganisationID)); err != nil {
 		return err
@@ -295,7 +256,7 @@ func (m *AccountAmendment) validateOrganisationID(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *AccountAmendment) validateRelationships(formats strfmt.Registry) error {
+func (m *AccountRequest) validateRelationships(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Relationships) { // not required
 		return nil
@@ -313,7 +274,7 @@ func (m *AccountAmendment) validateRelationships(formats strfmt.Registry) error 
 	return nil
 }
 
-func (m *AccountAmendment) validateType(formats strfmt.Registry) error {
+func (m *AccountRequest) validateType(formats strfmt.Registry) error {
 
 	if err := m.Type.Validate(formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -325,7 +286,7 @@ func (m *AccountAmendment) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *AccountAmendment) validateVersion(formats strfmt.Registry) error {
+func (m *AccountRequest) validateVersion(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Version) { // not required
 		return nil
@@ -339,7 +300,7 @@ func (m *AccountAmendment) validateVersion(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *AccountAmendment) MarshalBinary() ([]byte, error) {
+func (m *AccountRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -347,15 +308,15 @@ func (m *AccountAmendment) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *AccountAmendment) UnmarshalBinary(b []byte) error {
-	var res AccountAmendment
+func (m *AccountRequest) UnmarshalBinary(b []byte) error {
+	var res AccountRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res
 	return nil
 }
-func (m *AccountAmendment) Json() string {
+func (m *AccountRequest) Json() string {
 	json, err := json.MarshalIndent(m, "  ", "  ")
 	if err != nil {
 		log.Fatal(err)
