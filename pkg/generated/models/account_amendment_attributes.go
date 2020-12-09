@@ -25,6 +25,10 @@ type AccountAmendmentAttributes struct {
 	// A free-format reference that can be used to link this account to an external system.
 	CustomerID string `json:"customer_id,omitempty"`
 
+	// Reason for modification.
+	// Min Length: 1
+	ModifyReason string `json:"modify_reason,omitempty"`
+
 	// Name of the account holder, up to four lines possible.
 	// Max Items: 4
 	Name []string `json:"name,omitempty"`
@@ -41,6 +45,8 @@ func AccountAmendmentAttributesWithDefaults(defaults client.Defaults) *AccountAm
 
 		CustomerID: defaults.GetString("AccountAmendmentAttributes", "customer_id"),
 
+		ModifyReason: defaults.GetString("AccountAmendmentAttributes", "modify_reason"),
+
 		Name: make([]string, 0),
 
 		OrganisationIdentification: OrganisationIdentificationWithDefaults(defaults),
@@ -52,6 +58,13 @@ func AccountAmendmentAttributesWithDefaults(defaults client.Defaults) *AccountAm
 func (m *AccountAmendmentAttributes) WithCustomerID(customerID string) *AccountAmendmentAttributes {
 
 	m.CustomerID = customerID
+
+	return m
+}
+
+func (m *AccountAmendmentAttributes) WithModifyReason(modifyReason string) *AccountAmendmentAttributes {
+
+	m.ModifyReason = modifyReason
 
 	return m
 }
@@ -91,6 +104,10 @@ func (m *AccountAmendmentAttributes) WithoutPrivateIdentification() *AccountAmen
 func (m *AccountAmendmentAttributes) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateModifyReason(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
@@ -106,6 +123,19 @@ func (m *AccountAmendmentAttributes) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *AccountAmendmentAttributes) validateModifyReason(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ModifyReason) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("modify_reason", "body", string(m.ModifyReason), 1); err != nil {
+		return err
+	}
+
 	return nil
 }
 

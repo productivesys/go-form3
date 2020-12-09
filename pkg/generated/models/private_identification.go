@@ -48,18 +48,13 @@ type PrivateIdentification struct {
 	// Min Length: 1
 	Identification string `json:"identification"`
 
-	// identification issuer
-	// Min Length: 1
+	// Issuer of the `identification`
 	IdentificationIssuer string `json:"identification_issuer,omitempty"`
 
-	// identification scheme
-	// Max Length: 35
-	// Min Length: 1
+	// Scheme of the `identification`
 	IdentificationScheme string `json:"identification_scheme,omitempty"`
 
-	// identification scheme code
-	// Max Length: 35
-	// Min Length: 1
+	// The code that specifies the type of `identification`
 	IdentificationSchemeCode string `json:"identification_scheme_code,omitempty"`
 }
 
@@ -182,18 +177,6 @@ func (m *PrivateIdentification) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateIdentificationIssuer(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIdentificationScheme(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIdentificationSchemeCode(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -288,53 +271,6 @@ func (m *PrivateIdentification) validateIdentification(formats strfmt.Registry) 
 	}
 
 	if err := validate.MaxLength("identification", "body", string(m.Identification), 140); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *PrivateIdentification) validateIdentificationIssuer(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentificationIssuer) { // not required
-		return nil
-	}
-
-	if err := validate.MinLength("identification_issuer", "body", string(m.IdentificationIssuer), 1); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *PrivateIdentification) validateIdentificationScheme(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentificationScheme) { // not required
-		return nil
-	}
-
-	if err := validate.MinLength("identification_scheme", "body", string(m.IdentificationScheme), 1); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("identification_scheme", "body", string(m.IdentificationScheme), 35); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *PrivateIdentification) validateIdentificationSchemeCode(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentificationSchemeCode) { // not required
-		return nil
-	}
-
-	if err := validate.MinLength("identification_scheme_code", "body", string(m.IdentificationSchemeCode), 1); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("identification_scheme_code", "body", string(m.IdentificationSchemeCode), 35); err != nil {
 		return err
 	}
 

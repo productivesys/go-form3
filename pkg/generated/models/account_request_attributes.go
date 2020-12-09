@@ -23,12 +23,8 @@ import (
 type AccountRequestAttributes struct {
 
 	// Account number of the account. A unique number will automatically be generated if not provided.
-	// Pattern: ^[A-Z0-9]+$
+	// Pattern: ^[0-9]+$
 	AccountNumber string `json:"account_number,omitempty"`
-
-	// Alternative names. Used for Confirmation of Payee matching.
-	// Max Items: 3
-	AlternativeNames []string `json:"alternative_names,omitempty"`
 
 	// Local country bank identifier. In the UK this is the sort code.
 	// Pattern: ^[A-Z0-9]+$
@@ -54,7 +50,7 @@ type AccountRequestAttributes struct {
 	Country string `json:"country"`
 
 	// IBAN of the account. Will be calculated from other fields if not supplied.
-	// Pattern: ^[A-Z0-9]+$
+	// Pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{0,64}$
 	Iban string `json:"iban,omitempty"`
 
 	// Account holder names (for example title, first name, last name). Used for Confirmation of Payee matching.
@@ -72,8 +68,6 @@ func AccountRequestAttributesWithDefaults(defaults client.Defaults) *AccountRequ
 	return &AccountRequestAttributes{
 
 		AccountNumber: defaults.GetString("AccountRequestAttributes", "account_number"),
-
-		AlternativeNames: make([]string, 0),
 
 		BankID: defaults.GetString("AccountRequestAttributes", "bank_id"),
 
@@ -98,13 +92,6 @@ func AccountRequestAttributesWithDefaults(defaults client.Defaults) *AccountRequ
 func (m *AccountRequestAttributes) WithAccountNumber(accountNumber string) *AccountRequestAttributes {
 
 	m.AccountNumber = accountNumber
-
-	return m
-}
-
-func (m *AccountRequestAttributes) WithAlternativeNames(alternativeNames []string) *AccountRequestAttributes {
-
-	m.AlternativeNames = alternativeNames
 
 	return m
 }
@@ -190,10 +177,6 @@ func (m *AccountRequestAttributes) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateAlternativeNames(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateBankID(formats); err != nil {
 		res = append(res, err)
 	}
@@ -242,35 +225,8 @@ func (m *AccountRequestAttributes) validateAccountNumber(formats strfmt.Registry
 		return nil
 	}
 
-	if err := validate.Pattern("account_number", "body", string(m.AccountNumber), `^[A-Z0-9]+$`); err != nil {
+	if err := validate.Pattern("account_number", "body", string(m.AccountNumber), `^[0-9]+$`); err != nil {
 		return err
-	}
-
-	return nil
-}
-
-func (m *AccountRequestAttributes) validateAlternativeNames(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.AlternativeNames) { // not required
-		return nil
-	}
-
-	iAlternativeNamesSize := int64(len(m.AlternativeNames))
-
-	if err := validate.MaxItems("alternative_names", "body", iAlternativeNamesSize, 3); err != nil {
-		return err
-	}
-
-	for i := 0; i < len(m.AlternativeNames); i++ {
-
-		if err := validate.MinLength("alternative_names"+"."+strconv.Itoa(i), "body", string(m.AlternativeNames[i]), 1); err != nil {
-			return err
-		}
-
-		if err := validate.MaxLength("alternative_names"+"."+strconv.Itoa(i), "body", string(m.AlternativeNames[i]), 140); err != nil {
-			return err
-		}
-
 	}
 
 	return nil
@@ -347,7 +303,7 @@ func (m *AccountRequestAttributes) validateIban(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.Pattern("iban", "body", string(m.Iban), `^[A-Z0-9]+$`); err != nil {
+	if err := validate.Pattern("iban", "body", string(m.Iban), `^[A-Z]{2}[0-9]{2}[A-Z0-9]{0,64}$`); err != nil {
 		return err
 	}
 

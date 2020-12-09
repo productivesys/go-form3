@@ -21,6 +21,9 @@ import (
 // swagger:model AccountRequestRelationships
 type AccountRequestRelationships struct {
 
+	// account
+	Account *AccountRequestRelationshipsAccount `json:"account,omitempty"`
+
 	// account request submission
 	AccountRequestSubmission *AccountRequestRelationshipsAccountRequestSubmission `json:"account_request_submission,omitempty"`
 
@@ -31,10 +34,24 @@ type AccountRequestRelationships struct {
 func AccountRequestRelationshipsWithDefaults(defaults client.Defaults) *AccountRequestRelationships {
 	return &AccountRequestRelationships{
 
+		Account: AccountRequestRelationshipsAccountWithDefaults(defaults),
+
 		AccountRequestSubmission: AccountRequestRelationshipsAccountRequestSubmissionWithDefaults(defaults),
 
 		MasterAccount: AccountRequestRelationshipsMasterAccountWithDefaults(defaults),
 	}
+}
+
+func (m *AccountRequestRelationships) WithAccount(account AccountRequestRelationshipsAccount) *AccountRequestRelationships {
+
+	m.Account = &account
+
+	return m
+}
+
+func (m *AccountRequestRelationships) WithoutAccount() *AccountRequestRelationships {
+	m.Account = nil
+	return m
 }
 
 func (m *AccountRequestRelationships) WithAccountRequestSubmission(accountRequestSubmission AccountRequestRelationshipsAccountRequestSubmission) *AccountRequestRelationships {
@@ -65,6 +82,10 @@ func (m *AccountRequestRelationships) WithoutMasterAccount() *AccountRequestRela
 func (m *AccountRequestRelationships) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateAccount(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateAccountRequestSubmission(formats); err != nil {
 		res = append(res, err)
 	}
@@ -76,6 +97,24 @@ func (m *AccountRequestRelationships) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *AccountRequestRelationships) validateAccount(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Account) { // not required
+		return nil
+	}
+
+	if m.Account != nil {
+		if err := m.Account.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("account")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -133,6 +172,92 @@ func (m *AccountRequestRelationships) UnmarshalBinary(b []byte) error {
 	return nil
 }
 func (m *AccountRequestRelationships) Json() string {
+	json, err := json.MarshalIndent(m, "  ", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(json)
+}
+
+// AccountRequestRelationshipsAccount account request relationships account
+// swagger:model AccountRequestRelationshipsAccount
+type AccountRequestRelationshipsAccount struct {
+
+	// data
+	Data []*AccountReference `json:"data,omitempty"`
+}
+
+func AccountRequestRelationshipsAccountWithDefaults(defaults client.Defaults) *AccountRequestRelationshipsAccount {
+	return &AccountRequestRelationshipsAccount{
+
+		Data: make([]*AccountReference, 0),
+	}
+}
+
+func (m *AccountRequestRelationshipsAccount) WithData(data []*AccountReference) *AccountRequestRelationshipsAccount {
+
+	m.Data = data
+
+	return m
+}
+
+// Validate validates this account request relationships account
+func (m *AccountRequestRelationshipsAccount) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateData(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *AccountRequestRelationshipsAccount) validateData(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Data) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Data); i++ {
+		if swag.IsZero(m.Data[i]) { // not required
+			continue
+		}
+
+		if m.Data[i] != nil {
+			if err := m.Data[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("account" + "." + "data" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *AccountRequestRelationshipsAccount) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *AccountRequestRelationshipsAccount) UnmarshalBinary(b []byte) error {
+	var res AccountRequestRelationshipsAccount
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
+}
+func (m *AccountRequestRelationshipsAccount) Json() string {
 	json, err := json.MarshalIndent(m, "  ", "  ")
 	if err != nil {
 		log.Fatal(err)

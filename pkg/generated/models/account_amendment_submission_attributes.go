@@ -17,9 +17,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// AccountRequestSubmissionAttributes account request submission attributes
-// swagger:model AccountRequestSubmissionAttributes
-type AccountRequestSubmissionAttributes struct {
+// AccountAmendmentSubmissionAttributes account amendment submission attributes
+// swagger:model AccountAmendmentSubmissionAttributes
+type AccountAmendmentSubmissionAttributes struct {
 
 	// status
 	Status SubmissionStatus `json:"status,omitempty"`
@@ -33,45 +33,45 @@ type AccountRequestSubmissionAttributes struct {
 	SubmissionDatetime *strfmt.DateTime `json:"submission_datetime,omitempty"`
 }
 
-func AccountRequestSubmissionAttributesWithDefaults(defaults client.Defaults) *AccountRequestSubmissionAttributes {
-	return &AccountRequestSubmissionAttributes{
+func AccountAmendmentSubmissionAttributesWithDefaults(defaults client.Defaults) *AccountAmendmentSubmissionAttributes {
+	return &AccountAmendmentSubmissionAttributes{
 
 		// TODO Status: SubmissionStatus,
 
-		StatusReason: defaults.GetString("AccountRequestSubmissionAttributes", "status_reason"),
+		StatusReason: defaults.GetString("AccountAmendmentSubmissionAttributes", "status_reason"),
 
-		SubmissionDatetime: defaults.GetStrfmtDateTimePtr("AccountRequestSubmissionAttributes", "submission_datetime"),
+		SubmissionDatetime: defaults.GetStrfmtDateTimePtr("AccountAmendmentSubmissionAttributes", "submission_datetime"),
 	}
 }
 
-func (m *AccountRequestSubmissionAttributes) WithStatus(status SubmissionStatus) *AccountRequestSubmissionAttributes {
+func (m *AccountAmendmentSubmissionAttributes) WithStatus(status SubmissionStatus) *AccountAmendmentSubmissionAttributes {
 
 	m.Status = status
 
 	return m
 }
 
-func (m *AccountRequestSubmissionAttributes) WithStatusReason(statusReason string) *AccountRequestSubmissionAttributes {
+func (m *AccountAmendmentSubmissionAttributes) WithStatusReason(statusReason string) *AccountAmendmentSubmissionAttributes {
 
 	m.StatusReason = statusReason
 
 	return m
 }
 
-func (m *AccountRequestSubmissionAttributes) WithSubmissionDatetime(submissionDatetime strfmt.DateTime) *AccountRequestSubmissionAttributes {
+func (m *AccountAmendmentSubmissionAttributes) WithSubmissionDatetime(submissionDatetime strfmt.DateTime) *AccountAmendmentSubmissionAttributes {
 
 	m.SubmissionDatetime = &submissionDatetime
 
 	return m
 }
 
-func (m *AccountRequestSubmissionAttributes) WithoutSubmissionDatetime() *AccountRequestSubmissionAttributes {
+func (m *AccountAmendmentSubmissionAttributes) WithoutSubmissionDatetime() *AccountAmendmentSubmissionAttributes {
 	m.SubmissionDatetime = nil
 	return m
 }
 
-// Validate validates this account request submission attributes
-func (m *AccountRequestSubmissionAttributes) Validate(formats strfmt.Registry) error {
+// Validate validates this account amendment submission attributes
+func (m *AccountAmendmentSubmissionAttributes) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateStatus(formats); err != nil {
@@ -88,7 +88,7 @@ func (m *AccountRequestSubmissionAttributes) Validate(formats strfmt.Registry) e
 	return nil
 }
 
-func (m *AccountRequestSubmissionAttributes) validateStatus(formats strfmt.Registry) error {
+func (m *AccountAmendmentSubmissionAttributes) validateStatus(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Status) { // not required
 		return nil
@@ -104,7 +104,7 @@ func (m *AccountRequestSubmissionAttributes) validateStatus(formats strfmt.Regis
 	return nil
 }
 
-func (m *AccountRequestSubmissionAttributes) validateSubmissionDatetime(formats strfmt.Registry) error {
+func (m *AccountAmendmentSubmissionAttributes) validateSubmissionDatetime(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.SubmissionDatetime) { // not required
 		return nil
@@ -118,7 +118,7 @@ func (m *AccountRequestSubmissionAttributes) validateSubmissionDatetime(formats 
 }
 
 // MarshalBinary interface implementation
-func (m *AccountRequestSubmissionAttributes) MarshalBinary() ([]byte, error) {
+func (m *AccountAmendmentSubmissionAttributes) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -126,15 +126,15 @@ func (m *AccountRequestSubmissionAttributes) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *AccountRequestSubmissionAttributes) UnmarshalBinary(b []byte) error {
-	var res AccountRequestSubmissionAttributes
+func (m *AccountAmendmentSubmissionAttributes) UnmarshalBinary(b []byte) error {
+	var res AccountAmendmentSubmissionAttributes
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
 	*m = res
 	return nil
 }
-func (m *AccountRequestSubmissionAttributes) Json() string {
+func (m *AccountAmendmentSubmissionAttributes) Json() string {
 	json, err := json.MarshalIndent(m, "  ", "  ")
 	if err != nil {
 		log.Fatal(err)

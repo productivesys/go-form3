@@ -42,19 +42,6 @@ type OrganisationIdentification struct {
 	// Min Length: 1
 	Identification string `json:"identification,omitempty"`
 
-	// Issuer of identification.
-	IdentificationIssuer string `json:"identification_issuer,omitempty"`
-
-	// Scheme used for identification.
-	// Max Length: 35
-	// Min Length: 1
-	IdentificationScheme string `json:"identification_scheme,omitempty"`
-
-	// The code specifying the type of identification.
-	// Max Length: 35
-	// Min Length: 1
-	IdentificationSchemeCode string `json:"identification_scheme_code,omitempty"`
-
 	// Issuer of 'identification'.
 	RegistrationNumber string `json:"registration_number,omitempty"`
 
@@ -75,12 +62,6 @@ func OrganisationIdentificationWithDefaults(defaults client.Defaults) *Organisat
 		Country: defaults.GetString("OrganisationIdentification", "country"),
 
 		Identification: defaults.GetString("OrganisationIdentification", "identification"),
-
-		IdentificationIssuer: defaults.GetString("OrganisationIdentification", "identification_issuer"),
-
-		IdentificationScheme: defaults.GetString("OrganisationIdentification", "identification_scheme"),
-
-		IdentificationSchemeCode: defaults.GetString("OrganisationIdentification", "identification_scheme_code"),
 
 		RegistrationNumber: defaults.GetString("OrganisationIdentification", "registration_number"),
 
@@ -123,27 +104,6 @@ func (m *OrganisationIdentification) WithIdentification(identification string) *
 	return m
 }
 
-func (m *OrganisationIdentification) WithIdentificationIssuer(identificationIssuer string) *OrganisationIdentification {
-
-	m.IdentificationIssuer = identificationIssuer
-
-	return m
-}
-
-func (m *OrganisationIdentification) WithIdentificationScheme(identificationScheme string) *OrganisationIdentification {
-
-	m.IdentificationScheme = identificationScheme
-
-	return m
-}
-
-func (m *OrganisationIdentification) WithIdentificationSchemeCode(identificationSchemeCode string) *OrganisationIdentification {
-
-	m.IdentificationSchemeCode = identificationSchemeCode
-
-	return m
-}
-
 func (m *OrganisationIdentification) WithRegistrationNumber(registrationNumber string) *OrganisationIdentification {
 
 	m.RegistrationNumber = registrationNumber
@@ -179,14 +139,6 @@ func (m *OrganisationIdentification) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateIdentification(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIdentificationScheme(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIdentificationSchemeCode(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -287,40 +239,6 @@ func (m *OrganisationIdentification) validateIdentification(formats strfmt.Regis
 	}
 
 	if err := validate.MaxLength("identification", "body", string(m.Identification), 140); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *OrganisationIdentification) validateIdentificationScheme(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentificationScheme) { // not required
-		return nil
-	}
-
-	if err := validate.MinLength("identification_scheme", "body", string(m.IdentificationScheme), 1); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("identification_scheme", "body", string(m.IdentificationScheme), 35); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *OrganisationIdentification) validateIdentificationSchemeCode(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.IdentificationSchemeCode) { // not required
-		return nil
-	}
-
-	if err := validate.MinLength("identification_scheme_code", "body", string(m.IdentificationSchemeCode), 1); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("identification_scheme_code", "body", string(m.IdentificationSchemeCode), 35); err != nil {
 		return err
 	}
 
